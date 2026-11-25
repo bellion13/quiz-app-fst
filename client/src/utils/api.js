@@ -1,5 +1,27 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
+// Quản lý Token trong LocalStorage
+export function getToken() {
+  return localStorage.getItem('quiz_admin_token');
+}
+
+export function setToken(token) {
+  localStorage.setItem('quiz_admin_token', token);
+}
+
+export function removeToken() {
+  localStorage.removeItem('quiz_admin_token');
+}
+
+// Xử lý tự động redirect khi 401
+function handleAuthError() {
+  removeToken();
+  if (window.location.pathname.startsWith('/manager')) {
+    window.location.href = '/login?expired=1';
+  }
+}
+
+// Public: Lấy danh sách câu hỏi
 export async function fetchQuestions(topic = null) {
   const url = topic ? `${API_URL}/questions?topic=${topic}` : `${API_URL}/questions`;
   const response = await fetch(url);
@@ -9,6 +31,138 @@ export async function fetchQuestions(topic = null) {
   }
 
   return response.json();
+}
+
+// Admin: Đăng nhập
+export async function loginAdmin(username, password) {
+  const res = await fetch(`${API_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || 'Đăng nhập không thành công');
+  }
+
+  setToken(data.token);
+  return data;
+}
+
+// Admin: Thêm câu hỏi
+export async function createQuestion(questionData) {
+  const token = getToken();
+  const res = await fetch(`${API_URL}/questions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(questionData),
+  });
+
+  if (res.status === 401) {
+    handleAuthError();
+    throw new Error('Phiên đăng nhập hết hạn.');
+  }
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || 'Thêm câu hỏi thất bại.');
+  }
+  return data;
+}
+
+// Admin: Sửa câu hỏi
+export async function updateQuestion(id, questionData) {
+  const token = getToken();
+  const res = await fetch(`${API_URL}/questions/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(questionData),
+  });
+
+  if (res.status === 401) {
+    handleAuthError();
+    throw new Error('Phiên đăng nhập hết hạn.');
+  }
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || 'Cập nhật câu hỏi thất bại.');
+  }
+  return data;
+}
+
+// Admin: Xoá câu hỏi
+export async function deleteQuestion(id) {
+  const token = getToken();
+  const res = await fetch(`${API_URL}/questions/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (res.status === 401) {
+    handleAuthError();
+    throw new Error('Phiên đăng nhập hết hạn.');
+  }
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || 'Xoá câu hỏi thất bại.');
+  }
+  return data;
+}
+
+// Admin: Import câu hỏi
+export async function importQuestions(mode, questions) {
+  const token = getToken();
+  const res = await fetch(`${API_URL}/questions/import`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ mode, questions }),
+  });
+
+  if (res.status === 401) {
+    handleAuthError();
+    throw new Error('Phiên đăng nhập hết hạn.');
+  }
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || 'Import thất bại.');
+  }
+  return data;
+}
+
+// Admin: Export câu hỏi
+export async function exportQuestions() {
+  const token = getToken();
+  const res = await fetch(`${API_URL}/questions/export`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (res.status === 401) {
+    handleAuthError();
+    throw new Error('Phiên đăng nhập hết hạn.');
+  }
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || 'Xuất câu hỏi thất bại.');
+  }
+  return data;
 }
 
 /**
@@ -27,15 +181,12 @@ export function shuffleArray(array) {
  * Trộn câu hỏi và đáp án, map lại answer index
  */
 export function shuffleQuestions(questions) {
-  // Shuffle thứ tự câu hỏi
   const shuffledQuestions = shuffleArray(questions);
 
-  // Shuffle thứ tự đáp án cho mỗi câu
   return shuffledQuestions.map((q) => {
     const originalOptions = q.options;
     const correctAnswer = originalOptions[q.answer];
 
-    // Tạo mảng index và shuffle
     const indices = originalOptions.map((_, i) => i);
     const shuffledIndices = shuffleArray(indices);
 
