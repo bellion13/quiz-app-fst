@@ -1,0 +1,96 @@
+[
+  {
+    "topic": "html",
+    "question": "Thẻ HTML nào dùng để tạo tiêu đề lớn nhất?",
+    "options": ["<h6>", "<heading>", "<h1>", "<title>"],
+    "answer": 2,
+    "explanation": "<h1> là thẻ heading lớn nhất trong HTML, từ <h1> đến <h6> giảm dần."
+  },
+  {
+    "topic": "html",
+    "question": "Thuộc tính nào chỉ định địa chỉ liên kết trong thẻ <a>?",
+    "options": ["src", "href", "link", "url"],
+    "answer": 1,
+    "explanation": "href (Hypertext Reference) là thuộc tính chỉ định URL đích của liên kết."
+  },
+  {
+    "topic": "html",
+    "question": "Thẻ nào dùng để tạo danh sách không có thứ tự?",
+    "options": ["<ol>", "<list>", "<ul>", "<dl>"],
+    "answer": 2,
+    "explanation": "<ul> (unordered list) tạo danh sách không có thứ tự, hiển thị bằng bullet points."
+  },
+  {
+    "topic": "css",
+    "question": "Thuộc tính nào tạo flex container?",
+    "options": ["display: flex", "flex: 1", "position: flex", "align: flex"],
+    "answer": 0,
+    "explanation": "display: flex biến phần tử thành flex container."
+  },
+  {
+    "topic": "css",
+    "question": "Đơn vị nào tương đối so với font-size của phần tử cha?",
+    "options": ["px", "em", "vh", "cm"],
+    "answer": 1,
+    "explanation": "em là đơn vị tương đối, 1em bằng font-size của phần tử cha (hoặc chính nó nếu set trên font-size)."
+  },
+  {
+    "topic": "css",
+    "question": "Thuộc tính nào dùng để bo tròn góc?",
+    "options": ["border-style", "border-radius", "border-round", "corner-radius"],
+    "answer": 1,
+    "explanation": "border-radius dùng để bo tròn các góc của phần tử."
+  },
+  {
+    "topic": "js",
+    "question": "Từ khoá nào khai báo biến không thể gán lại?",
+    "options": ["var", "let", "const", "final"],
+    "answer": 2,
+    "explanation": "const khai báo hằng, không thể gán lại giá trị sau khi khởi tạo."
+  },
+  {
+    "topic": "js",
+    "question": "Phương thức nào thêm phần tử vào cuối mảng?",
+    "options": ["unshift()", "push()", "append()", "add()"],
+    "answer": 1,
+    "explanation": "push() thêm một hoặc nhiều phần tử vào cuối mảng và trả về độ dài mới."
+  },
+  {
+    "topic": "js",
+    "question": "typeof null trả về gì?",
+    "options": ["\"null\"", "\"undefined\"", "\"object\"", "\"boolean\""],
+    "answer": 2,
+    "explanation": "Đây là bug lịch sử của JavaScript. typeof null trả về 'object' thay vì 'null'."
+  },
+  {
+    "topic": "react",
+    "question": "useEffect với mảng phụ thuộc rỗng [] chạy khi nào?",
+    "options": [
+      "Mỗi lần render",
+      "Chỉ một lần sau lần render đầu",
+      "Khi state thay đổi",
+      "Trước khi render"
+    ],
+    "answer": 1,
+    "explanation": "Mảng rỗng nghĩa là không phụ thuộc gì, nên effect chỉ chạy một lần sau lần mount."
+  },
+  {
+    "topic": "react",
+    "question": "Hook nào dùng để quản lý state trong function component?",
+    "options": ["useEffect", "useState", "useRef", "useMemo"],
+    "answer": 1,
+    "explanation": "useState trả về một cặp [state, setState] để quản lý state trong function component."
+  },
+  {
+    "topic": "react",
+    "question": "JSX được biên dịch thành gì?",
+    "options": [
+      "HTML trực tiếp",
+      "React.createElement()",
+      "document.createElement()",
+      "Template literals"
+    ],
+    "answer": 1,
+    "explanation": "JSX là syntax sugar, được Babel/compiler biên dịch thành các lời gọi React.createElement()."
+  }
+]
