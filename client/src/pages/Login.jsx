@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { Lock } from 'lucide-react';
 import { loginAdmin, getToken } from '../utils/api';
 
 function Login() {
@@ -40,7 +41,9 @@ function Login() {
       <Link to="/" className="back-link">← Về trang làm bài</Link>
 
       <div className="card login-card">
-        <h2>🔒 Đăng nhập Quản trị viên</h2>
+        <h2 className="inline-icon">
+          <Lock size={22} /> Đăng nhập Quản trị viên
+        </h2>
         <p className="subtitle">Chỉ dành cho admin để quản lý ngân hàng câu hỏi</p>
 
         {error && <div className="error-alert">{error}</div>}

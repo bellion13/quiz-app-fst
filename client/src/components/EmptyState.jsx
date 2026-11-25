@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
+import { Inbox } from 'lucide-react';
 
 function EmptyState({ topic }) {
   return (
     <div className="empty-state">
-      <div className="empty-icon">📭</div>
+      <div className="empty-icon">
+        <Inbox size={48} color="#94a3b8" />
+      </div>
       <h2>Chưa có câu hỏi nào</h2>
       <p>
         {topic

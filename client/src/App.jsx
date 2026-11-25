@@ -1,4 +1,5 @@
 import { Routes, Route, Link } from 'react-router-dom';
+import { Zap, Settings, Lock } from 'lucide-react';
 import Home from './pages/Home';
 import PracticeMode from './pages/PracticeMode';
 import TopicMode from './pages/TopicMode';
@@ -13,13 +14,21 @@ function App() {
   return (
     <div className="app">
       <header className="site-nav">
-        <Link to="/" className="nav-logo">
-          ⚡ <strong>Frontend Quiz</strong>
+        <Link to="/" className="nav-logo inline-icon">
+          <Zap size={20} /> <strong>Frontend Quiz</strong>
         </Link>
         <div className="nav-links">
           <Link to="/" className="nav-link">Làm bài</Link>
-          <Link to={isAuth ? "/manager" : "/login"} className="nav-link nav-btn-admin">
-            {isAuth ? "⚙️ Quản trị" : "🔒 Admin"}
+          <Link to={isAuth ? "/manager" : "/login"} className="nav-link nav-btn-admin inline-icon">
+            {isAuth ? (
+              <>
+                <Settings size={16} /> Quản trị
+              </>
+            ) : (
+              <>
+                <Lock size={16} /> Admin
+              </>
+            )}
           </Link>
         </div>
       </header>

@@ -1,3 +1,5 @@
+import { Lightbulb } from 'lucide-react';
+
 function QuestionCard({
   question,
   questionNumber,
@@ -42,8 +44,9 @@ function QuestionCard({
       </ul>
 
       {answered && question.explanation && (
-        <div className="explanation">
-          💡 {question.explanation}
+        <div className="explanation inline-icon-start">
+          <Lightbulb size={18} style={{ flexShrink: 0, marginTop: '2px', color: '#d97706' }} />
+          <span>{question.explanation}</span>
         </div>
       )}
     </div>

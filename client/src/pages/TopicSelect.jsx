@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
+import { Globe, Palette, Zap, Atom } from 'lucide-react';
 
 const topics = [
-  { name: 'html', label: 'HTML', icon: '🌐' },
-  { name: 'css', label: 'CSS', icon: '🎨' },
-  { name: 'js', label: 'JavaScript', icon: '⚡' },
-  { name: 'react', label: 'React', icon: '⚛️' },
+  { name: 'html', label: 'HTML', Icon: Globe, color: '#dc2626' },
+  { name: 'css', label: 'CSS', Icon: Palette, color: '#0284c7' },
+  { name: 'js', label: 'JavaScript', Icon: Zap, color: '#d97706' },
+  { name: 'react', label: 'React', Icon: Atom, color: '#4f46e5' },
 ];
 
 function TopicSelect() {
@@ -18,14 +19,16 @@ function TopicSelect() {
       </p>
 
       <div className="topic-grid">
-        {topics.map((topic) => (
+        {topics.map(({ name, label, Icon, color }) => (
           <Link
-            key={topic.name}
-            to={`/topic/${topic.name}`}
+            key={name}
+            to={`/topic/${name}`}
             className="card topic-card"
           >
-            <div className="topic-icon">{topic.icon}</div>
-            <h3>{topic.label}</h3>
+            <div className="topic-icon">
+              <Icon size={36} color={color} />
+            </div>
+            <h3>{label}</h3>
           </Link>
         ))}
       </div>

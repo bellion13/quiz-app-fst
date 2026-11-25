@@ -1,6 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
+  Settings,
+  Home as HomeIcon,
+  Plus,
+  Upload,
+  Download,
+  Pencil,
+  Trash2,
+  X,
+  Lightbulb,
+  CheckCircle2,
+  LogOut,
+} from 'lucide-react';
+import {
   fetchQuestions,
   createQuestion,
   updateQuestion,
@@ -281,12 +294,18 @@ function Manager() {
       {/* Header */}
       <div className="manager-header">
         <div>
-          <h2>⚙️ Quản lý ngân hàng câu hỏi</h2>
+          <h2 className="inline-icon">
+            <Settings size={24} /> Quản lý ngân hàng câu hỏi
+          </h2>
           <p className="subtitle">Thêm, sửa, xoá và sao lưu câu hỏi cho ứng dụng</p>
         </div>
         <div className="manager-actions">
-          <Link to="/" className="btn btn-outline">🏠 Về làm quiz</Link>
-          <button onClick={handleLogout} className="btn btn-secondary">Đăng xuất</button>
+          <Link to="/" className="btn btn-outline inline-icon">
+            <HomeIcon size={16} /> Về làm quiz
+          </Link>
+          <button onClick={handleLogout} className="btn btn-secondary inline-icon">
+            <LogOut size={16} /> Đăng xuất
+          </button>
         </div>
       </div>
 
@@ -294,21 +313,23 @@ function Manager() {
       {notification && (
         <div className={`notification-bar ${notification.type}`}>
           <span>{notification.message}</span>
-          <button onClick={() => setNotification(null)}>✕</button>
+          <button onClick={() => setNotification(null)} aria-label="Đóng thông báo">
+            <X size={18} />
+          </button>
         </div>
       )}
 
       {/* Toolbar */}
       <div className="manager-toolbar card">
         <div className="toolbar-left">
-          <button className="btn btn-primary" onClick={handleOpenAdd}>
-            ➕ Thêm câu hỏi
+          <button className="btn btn-primary inline-icon" onClick={handleOpenAdd}>
+            <Plus size={16} /> Thêm câu hỏi
           </button>
-          <button className="btn btn-outline" onClick={() => setShowImportModal(true)}>
-            📥 Import JSON
+          <button className="btn btn-outline inline-icon" onClick={() => setShowImportModal(true)}>
+            <Upload size={16} /> Import JSON
           </button>
-          <button className="btn btn-outline" onClick={handleExport}>
-            📤 Export JSON
+          <button className="btn btn-outline inline-icon" onClick={handleExport}>
+            <Download size={16} /> Export JSON
           </button>
         </div>
 
@@ -360,7 +381,10 @@ function Manager() {
                   <td>
                     <div className="table-question-title">{q.question}</div>
                     {q.explanation && (
-                      <div className="table-explanation">💡 {q.explanation}</div>
+                      <div className="table-explanation inline-icon-start">
+                        <Lightbulb size={14} style={{ flexShrink: 0, marginTop: '2px', color: '#d97706' }} />
+                        <span>{q.explanation}</span>
+                      </div>
                     )}
                   </td>
                   <td>
@@ -371,16 +395,16 @@ function Manager() {
                   <td style={{ textAlign: 'center' }}>
                     <div className="table-actions">
                       <button
-                        className="btn-sm btn-edit"
+                        className="btn-sm btn-edit inline-icon"
                         onClick={() => handleOpenEdit(q)}
                       >
-                        ✏️ Sửa
+                        <Pencil size={14} /> Sửa
                       </button>
                       <button
-                        className="btn-sm btn-delete"
+                        className="btn-sm btn-delete inline-icon"
                         onClick={() => handleDelete(q.id, q.question)}
                       >
-                        🗑️ Xoá
+                        <Trash2 size={14} /> Xoá
                       </button>
                     </div>
                   </td>
@@ -396,8 +420,20 @@ function Manager() {
         <div className="modal-backdrop">
           <div className="modal-card">
             <div className="modal-header">
-              <h3>{editingQuestion ? '✏️ Chỉnh sửa câu hỏi' : '➕ Thêm câu hỏi mới'}</h3>
-              <button className="btn-close" onClick={() => setShowModal(false)}>✕</button>
+              <h3 className="inline-icon">
+                {editingQuestion ? (
+                  <>
+                    <Pencil size={18} /> Chỉnh sửa câu hỏi
+                  </>
+                ) : (
+                  <>
+                    <Plus size={18} /> Thêm câu hỏi mới
+                  </>
+                )}
+              </h3>
+              <button className="btn-close" onClick={() => setShowModal(false)} aria-label="Đóng">
+                <X size={20} />
+              </button>
             </div>
 
             {formError && <div className="error-alert">{formError}</div>}
@@ -454,7 +490,7 @@ function Manager() {
                           onClick={() => handleRemoveOption(idx)}
                           title="Xoá đáp án này"
                         >
-                          ✕
+                          <X size={14} />
                         </button>
                       )}
                     </div>
@@ -506,8 +542,12 @@ function Manager() {
         <div className="modal-backdrop">
           <div className="modal-card">
             <div className="modal-header">
-              <h3>📥 Import câu hỏi từ file JSON</h3>
-              <button className="btn-close" onClick={() => setShowImportModal(false)}>✕</button>
+              <h3 className="inline-icon">
+                <Upload size={18} /> Import câu hỏi từ file JSON
+              </h3>
+              <button className="btn-close" onClick={() => setShowImportModal(false)} aria-label="Đóng">
+                <X size={20} />
+              </button>
             </div>
 
             {importError && <div className="error-alert">{importError}</div>}
@@ -520,8 +560,8 @@ function Manager() {
                 onChange={handleFileChange}
               />
               {importData && (
-                <p className="helper-text success-text">
-                  ✅ Đã nhận diện được <strong>{importData.length}</strong> câu hỏi trong file.
+                <p className="helper-text success-text inline-icon">
+                  <CheckCircle2 size={16} /> Đã nhận diện được <strong>{importData.length}</strong> câu hỏi trong file.
                 </p>
               )}
             </div>

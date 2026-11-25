@@ -36,6 +36,26 @@ body {
   flex: 1;
 }
 
+/* ===== Icon Alignment Utilities ===== */
+.inline-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.inline-icon-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.inline-icon-start {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
 /* ===== Site Navigation Header ===== */
 .site-nav {
   display: flex;
