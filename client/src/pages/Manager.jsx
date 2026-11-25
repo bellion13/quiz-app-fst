@@ -9,6 +9,7 @@ import {
   exportQuestions,
   getToken,
   removeToken,
+  verifyToken,
 } from '../utils/api';
 import Loading from '../components/Loading';
 
@@ -48,11 +49,23 @@ function Manager() {
   const [importError, setImportError] = useState(null);
   const [importLoading, setImportLoading] = useState(false);
 
-  // Kiểm tra token khi mount
+  // Kiểm tra token khi mount (bao gồm kiểm tra token hết hạn/sai với server)
   useEffect(() => {
-    if (!getToken()) {
-      navigate('/login');
+    let cancelled = false;
+    async function checkAuth() {
+      if (!getToken()) {
+        navigate('/login');
+        return;
+      }
+      const isValid = await verifyToken();
+      if (!cancelled && !isValid) {
+        navigate('/login?expired=1');
+      }
     }
+    checkAuth();
+    return () => {
+      cancelled = true;
+    };
   }, [navigate]);
 
   const loadData = async () => {

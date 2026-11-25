@@ -50,6 +50,30 @@ export async function loginAdmin(username, password) {
   return data;
 }
 
+// Admin: Kiểm tra token còn hợp lệ không
+export async function verifyToken() {
+  const token = getToken();
+  if (!token) return false;
+
+  try {
+    const res = await fetch(`${API_URL}/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) {
+      removeToken();
+      return false;
+    }
+    const data = await res.json();
+    if (!data.valid) {
+      removeToken();
+      return false;
+    }
+    return true;
+  } catch {
+    return true; // Nếu lỗi mạng tạm thời, không xoá token vội
+  }
+}
+
 // Admin: Thêm câu hỏi
 export async function createQuestion(questionData) {
   const token = getToken();
