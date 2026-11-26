@@ -574,6 +574,20 @@ h3 {
   padding: 20px;
 }
 
+.modal-backdrop-top {
+  z-index: 1100;
+}
+
+.confirm-modal-card {
+  max-width: 460px;
+}
+
+.confirm-modal-body {
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
 .modal-card {
   background: var(--bg-surface);
   color: var(--text-primary);

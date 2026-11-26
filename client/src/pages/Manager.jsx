@@ -12,6 +12,7 @@ import {
   Lightbulb,
   CheckCircle2,
   LogOut,
+  AlertTriangle,
 } from 'lucide-react';
 import {
   fetchQuestions,
@@ -61,6 +62,7 @@ function Manager() {
   const [importData, setImportData] = useState(null);
   const [importError, setImportError] = useState(null);
   const [importLoading, setImportLoading] = useState(false);
+  const [showReplaceConfirmModal, setShowReplaceConfirmModal] = useState(false);
 
   // Kiểm tra token khi mount (bao gồm kiểm tra token hết hạn/sai với server)
   useEffect(() => {
@@ -254,6 +256,26 @@ function Manager() {
     reader.readAsText(file);
   };
 
+  // Gửi request Import lên server
+  const runImport = async () => {
+    try {
+      setImportLoading(true);
+      setImportError(null);
+      const res = await importQuestions(importMode, importData);
+      setNotification({ type: 'success', message: res.message });
+      setShowReplaceConfirmModal(false);
+      setShowImportModal(false);
+      setImportFile(null);
+      setImportData(null);
+      await loadData();
+    } catch (err) {
+      setShowReplaceConfirmModal(false);
+      setImportError(err.message);
+    } finally {
+      setImportLoading(false);
+    }
+  };
+
   // Thực hiện Import
   const handleExecuteImport = async () => {
     if (!importData || importData.length === 0) {
@@ -262,26 +284,11 @@ function Manager() {
     }
 
     if (importMode === 'replace') {
-      const confirmReplace = window.confirm(
-        '⚠️ BẠN CÓ CHẮC CHẮN MUỐN XOÁ TOÀN BỘ CÂU HỎI CŨ VÀ THAY BẰNG BỘ MỚI KHÔNG?\nThao tác này không thể hoàn tác!'
-      );
-      if (!confirmReplace) return;
+      setShowReplaceConfirmModal(true);
+      return;
     }
 
-    try {
-      setImportLoading(true);
-      setImportError(null);
-      const res = await importQuestions(importMode, importData);
-      setNotification({ type: 'success', message: res.message });
-      setShowImportModal(false);
-      setImportFile(null);
-      setImportData(null);
-      await loadData();
-    } catch (err) {
-      setImportError(err.message);
-    } finally {
-      setImportLoading(false);
-    }
+    await runImport();
   };
 
   // Lọc câu hỏi theo topic
@@ -614,6 +621,55 @@ function Manager() {
                 onClick={handleExecuteImport}
               >
                 {importLoading ? 'Đang xử lý...' : (importMode === 'replace' ? 'Thay thế toàn bộ' : 'Import câu hỏi')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL XÁC NHẬN THAY THẾ TOÀN BỘ */}
+      {showReplaceConfirmModal && (
+        <div className="modal-backdrop modal-backdrop-top">
+          <div className="modal-card confirm-modal-card">
+            <div className="modal-header">
+              <h3 className="inline-icon" style={{ color: 'var(--secondary)' }}>
+                <AlertTriangle size={20} /> Xác nhận thay thế
+              </h3>
+              <button
+                className="btn-close"
+                onClick={() => setShowReplaceConfirmModal(false)}
+                disabled={importLoading}
+                aria-label="Đóng"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="confirm-modal-body">
+              <p>
+                <strong>Bạn có chắc muốn xoá toàn bộ câu hỏi cũ và thay bằng bộ mới?</strong>
+              </p>
+              <p className="helper-text" style={{ marginTop: '8px' }}>
+                Thao tác này không thể hoàn tác. Hiện có <strong>{questions.length}</strong> câu hỏi cũ sẽ bị xoá và thay bằng <strong>{importData?.length || 0}</strong> câu hỏi mới.
+              </p>
+            </div>
+
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={() => setShowReplaceConfirmModal(false)}
+                disabled={importLoading}
+              >
+                Huỷ
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={runImport}
+                disabled={importLoading}
+              >
+                {importLoading ? 'Đang thay thế...' : 'Xác nhận thay thế'}
               </button>
             </div>
           </div>
