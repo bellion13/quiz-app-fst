@@ -11,7 +11,7 @@ function Home() {
 
       <div className="mode-cards">
         <Link to="/practice" className="card mode-card">
-          <div className="icon">
+          <div className="icon icon-practice">
             <Target size={40} color="#0f3460" />
           </div>
           <h3>Làm từng câu</h3>
@@ -19,7 +19,7 @@ function Home() {
         </Link>
 
         <Link to="/topic" className="card mode-card">
-          <div className="icon">
+          <div className="icon icon-topic">
             <BookOpen size={40} color="#e94560" />
           </div>
           <h3>Làm theo chủ đề</h3>

@@ -25,7 +25,7 @@ function TopicSelect() {
             to={`/topic/${name}`}
             className="card topic-card"
           >
-            <div className="topic-icon">
+            <div className={`topic-icon topic-icon-${name}`}>
               <Icon size={36} color={color} />
             </div>
             <h3>{label}</h3>
