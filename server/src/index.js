@@ -11,7 +11,24 @@ const PORT = process.env.PORT || 3001;
 app.set('trust proxy', 1);
 
 // Middleware
-app.use(cors());
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map((url) => url.trim().replace(/\/+$/, ''))
+  : null;
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Cho phép request không có Origin (curl, health check) hoặc khi chưa set FRONTEND_URL
+      if (!origin || !allowedOrigins) {
+        return callback(null, true);
+      }
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error('Not allowed by CORS'));
+    },
+  })
+);
 app.use(express.json({ limit: '1mb' }));
 
 // Health check
