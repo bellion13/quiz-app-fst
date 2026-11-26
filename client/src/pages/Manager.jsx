@@ -351,7 +351,7 @@ function Manager() {
 
       {/* Bảng câu hỏi */}
       {loading ? (
-        <Loading />
+        <Loading variant="table" />
       ) : filteredQuestions.length === 0 ? (
         <div className="card empty-state">
           <h3>Chưa có câu hỏi nào trong mục này.</h3>
